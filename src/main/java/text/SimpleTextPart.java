@@ -1,48 +1,38 @@
 package text;
 
+import java.util.Objects;
+
 public abstract class SimpleTextPart implements TextPart {
 
-	static String symbolPattern;
 	private char symbol;
 
 	SimpleTextPart() {
 	}
 
-	SimpleTextPart(char symbol) {
-		this.symbol = symbol;
-	}
-
-	SimpleTextPart(String symbol) {
-		if (symbol.matches(symbolPattern)) {
-			this.symbol = symbol.charAt(0);
-		} else {
-			throw new UnsupportedOperationException();
-		}
-	}
-
 	public void add(TextPart textPart) {
-		if (symbol == Character.MIN_VALUE && textPart instanceof SimpleTextPart) {
-			symbol = ((SimpleTextPart) textPart).getSymbol();
-		} else {
-			throw new UnsupportedOperationException();
-		}
+		throw new UnsupportedOperationException();
 	}
 
 	public void remove(TextPart textPart) {
-		if (symbol != Character.MIN_VALUE && textPart instanceof SimpleTextPart) {
-			if (symbol == ((SimpleTextPart) textPart).getSymbol()) {
-				symbol = Character.MIN_VALUE;
-			} else {
-				throw new UnsupportedOperationException();
-			}
-		} else {
-			throw new UnsupportedOperationException();
-		}
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String toString() {
 		return String.valueOf(symbol);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		SimpleTextPart that = (SimpleTextPart) o;
+		return symbol == that.symbol;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(symbol);
 	}
 
 	public char getSymbol() {

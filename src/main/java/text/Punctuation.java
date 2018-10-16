@@ -2,19 +2,21 @@ package text;
 
 public class Punctuation extends SimpleTextPart {
 
-	static {
-		symbolPattern = "\\p{Punct}";
-	}
+	private static final String PUNCT_PATTERN = "\\p{Punct}";
 
 	public Punctuation() {
 		super();
 	}
 
 	public Punctuation(char symbol) {
-		super(symbol);
+		this(String.valueOf(symbol));
 	}
 
 	public Punctuation(String symbol) {
-		super(symbol);
+		if (symbol.matches(PUNCT_PATTERN)) {
+			setSymbol(symbol.charAt(0));
+		} else {
+			throw new UnsupportedOperationException("Can not create Punctuation!");
+		}
 	}
 }

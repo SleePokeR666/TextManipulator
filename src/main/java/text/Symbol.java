@@ -2,19 +2,21 @@ package text;
 
 public class Symbol extends SimpleTextPart {
 
-	static {
-		symbolPattern = "\\w";
-	}
+	private static final String SYMBOL_PATTERN = "\\w";
 
 	public Symbol() {
 		super();
 	}
 
 	public Symbol(char symbol) {
-		super(symbol);
+		this(String.valueOf(symbol));
 	}
 
 	public Symbol(String symbol) {
-		super(symbol);
+		if (symbol.matches(SYMBOL_PATTERN)) {
+			setSymbol(symbol.charAt(0));
+		} else {
+			throw new UnsupportedOperationException("Can not create Symbol!");
+		}
 	}
 }
