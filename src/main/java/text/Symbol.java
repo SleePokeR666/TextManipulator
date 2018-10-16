@@ -1,48 +1,20 @@
 package text;
 
-public class Symbol implements TextPart {
+public class Symbol extends SimpleTextPart {
 
-	private static final String SYMBOL_PATTERN = "\\w";
-	private char symbol;
+	static {
+		symbolPattern = "\\w";
+	}
 
 	public Symbol() {
-
+		super();
 	}
 
 	public Symbol(char symbol) {
-		this.symbol = symbol;
+		super(symbol);
 	}
 
 	public Symbol(String symbol) {
-		if (symbol.matches(SYMBOL_PATTERN)) {
-			this.symbol = symbol.charAt(0);
-		} else {
-			throw new UnsupportedOperationException();
-		}
-	}
-
-	public void add(TextPart textPart) {
-		if (symbol == Character.MIN_VALUE && textPart instanceof Symbol) {
-			symbol = ((Symbol) textPart).symbol;
-		} else {
-			throw new UnsupportedOperationException();
-		}
-	}
-
-	public void remove(TextPart textPart) {
-		if (symbol != Character.MIN_VALUE && textPart instanceof Symbol) {
-			if (symbol == ((Symbol) textPart).symbol) {
-				symbol = Character.MIN_VALUE;
-			} else {
-				throw new UnsupportedOperationException();
-			}
-		} else {
-			throw new UnsupportedOperationException();
-		}
-	}
-
-	@Override
-	public String toString() {
-		return String.valueOf(symbol);
+		super(symbol);
 	}
 }
