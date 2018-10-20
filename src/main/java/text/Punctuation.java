@@ -2,8 +2,6 @@ package text;
 
 public class Punctuation extends SimpleTextPart {
 
-	private static final String PUNCT_PATTERN = "\\p{Punct}";
-
 	public Punctuation() {
 		super();
 	}
@@ -15,4 +13,5 @@ public class Punctuation extends SimpleTextPart {
 	public Punctuation(String symbol) {
 		super(symbol);
 	}
+
 }

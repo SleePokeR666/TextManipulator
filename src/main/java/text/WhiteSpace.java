@@ -2,8 +2,6 @@ package text;
 
 public class WhiteSpace extends SimpleTextPart {
 
-	private static final String WHITESPACE_PATTERN = "\\p{Blank}";
-
 	public WhiteSpace() {
 		super();
 	}

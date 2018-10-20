@@ -7,6 +7,7 @@ public abstract class SimpleTextPart implements TextPart {
 	private char symbol;
 
 	SimpleTextPart() {
+
 	}
 
 	SimpleTextPart(char symbol) {
