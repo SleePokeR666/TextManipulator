@@ -2,6 +2,7 @@ package text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 abstract class ComplexTextPart implements CompositeTextPart {
 
@@ -43,11 +44,24 @@ abstract class ComplexTextPart implements CompositeTextPart {
 		return result.toString();
 	}
 
-	public List<TextPart> getTextParts() {
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Word word = (Word) o;
+		return getTextParts().equals(word.getTextParts());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getTextParts());
+	}
+
+	List<TextPart> getTextParts() {
 		return textParts;
 	}
 
-	public void setTextParts(List<TextPart> textParts) {
+	void setTextParts(List<TextPart> textParts) {
 		this.textParts = textParts;
 	}
 
