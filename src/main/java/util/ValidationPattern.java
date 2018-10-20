@@ -6,7 +6,7 @@ public enum ValidationPattern {
 	WHITESPACE("\\p{Blank}"),
 	PUNCTUATION("\\p{Punct}"),
 	WORD("\\w+"),
-	SENTENCE(""),
+	SENTENCE("[^!?.]+[!?.]"),
 	PARAGRAPH(""),
 	TEXT(""),
 	LEXEME(""),
@@ -21,4 +21,5 @@ public enum ValidationPattern {
 	public String getPattern() {
 		return pattern;
 	}
+
 }
