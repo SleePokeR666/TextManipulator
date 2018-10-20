@@ -9,12 +9,17 @@ public abstract class SimpleTextPart implements TextPart {
 	SimpleTextPart() {
 	}
 
-	public void add(TextPart textPart) {
-		throw new UnsupportedOperationException();
+	SimpleTextPart(char symbol) {
+		this.symbol = symbol;
 	}
 
-	public void remove(TextPart textPart) {
-		throw new UnsupportedOperationException();
+	SimpleTextPart(String symbol) {
+		this.symbol = symbol.charAt(0);
+	}
+
+	@Override
+	public int length() {
+		return 1;
 	}
 
 	@Override

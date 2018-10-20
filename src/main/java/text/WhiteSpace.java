@@ -9,14 +9,11 @@ public class WhiteSpace extends SimpleTextPart {
 	}
 
 	public WhiteSpace(char symbol) {
-		this(String.valueOf(symbol));
+		super(symbol);
 	}
 
 	public WhiteSpace(String symbol) {
-		if (symbol.matches(WHITESPACE_PATTERN)) {
-			setSymbol(symbol.charAt(0));
-		} else {
-			throw new UnsupportedOperationException("Can not create WhiteSpace!");
-		}
+		super(symbol);
 	}
+
 }

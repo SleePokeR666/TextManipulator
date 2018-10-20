@@ -10,18 +10,23 @@ public class Word implements TextPart {
 	private List<TextPart> letters;
 
 	public Word() {
-		letters = new ArrayList<TextPart>();
+		letters = new ArrayList<>();
 	}
 
 	public Word(String word) {
-		letters = new ArrayList<TextPart>();
-		if (word.matches(wordPattern)) {
-			for (int i = 0; i < word.length(); i++) {
-				letters.add(new Symbol(word.charAt(i)));
-			}
-		} else {
-			throw new UnsupportedOperationException();
+		letters = new ArrayList<>();
+		for (int i = 0; i < word.length(); i++) {
+			letters.add(new Symbol(word.charAt(i)));
 		}
+	}
+
+	@Override
+	public int length() {
+		int length = 0;
+		for (TextPart textPart : letters) {
+			length += textPart.length();
+		}
+		return length;
 	}
 
 	public void add(TextPart textPart) {
@@ -36,7 +41,7 @@ public class Word implements TextPart {
 	public String toString() {
 		StringBuilder result = new StringBuilder();
 		for (TextPart letter : letters) {
-			result.append(letter);
+			result.append(letter.toString());
 		}
 		return result.toString();
 	}
