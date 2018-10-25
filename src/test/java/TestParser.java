@@ -1,10 +1,11 @@
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import text.CompositeTextPart;
+import util.TestParserData;
 
 import static org.testng.Assert.assertEquals;
 
-public class TestParser {
+public class TestParser implements TestParserData {
 
 	private Parser parser = Parser.getInstance();
 
@@ -30,8 +31,14 @@ public class TestParser {
 
 	@DataProvider
 	public static Object[][] parseSentenceData() {
-		String sentence = "Сложение (+), вычитание и унарный минус (-), умножение (*), деление (/) и присвоение (=) работают одинаково фактически во всех языках программирования.";
-		return new Object[][] {{sentence}};
+		return new Object[][] {{positiveSentence1}, {positiveSentence2}, {positiveSentence3}};
+	}
+
+	@DataProvider
+	public static Object[][] parseSentenceDataException() {
+		return new Object[][]{
+				{" Sentence."}, {"Sentence! "}, {"?Sentence!"}, {"Sentence.."}
+		};
 	}
 
 	@Test(dataProvider = "parseWordData")
@@ -50,5 +57,11 @@ public class TestParser {
 	public void parseSentenceTest(String expectedSentence) {
 		CompositeTextPart testedSentence = parser.parseSentence(expectedSentence);
 		assertEquals(testedSentence.toString(), expectedSentence);
+	}
+
+	@Test(dataProvider = "parseSentenceDataException",
+			expectedExceptions = IllegalArgumentException.class)
+	public void parseSentenceTestException(String sentence) {
+		parser.parseSentence(sentence);
 	}
 }
