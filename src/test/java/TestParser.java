@@ -1,7 +1,6 @@
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import text.CompositeTextPart;
-import text.Word;
 
 import static org.testng.Assert.assertEquals;
 
@@ -11,29 +10,34 @@ public class TestParser {
 
 	@DataProvider
 	public static Object[][] parseWordData() {
-		return new Object[][]{{"Ж", new Word("Ж")}, {"Слово", new Word("Слово")},
-				{"СЛОВО", new Word("СЛОВО")}, {"G", new Word("G")}, {"Word", new Word("Word")},
-				{"WORD", new Word("WORD")}};
+		return new Object[][]{
+				{"А"    }, {"Я"    }, {"П"    }, {"а"    }, {"я"    }, {"п"    },
+				{"A"    }, {"Z"    }, {"Q"    }, {"a"    }, {"z"    }, {"q"    },
+				{"СЛОВО"}, {"слово"}, {"WORD" }, {"word" }};
 	}
 
 	@DataProvider
 	public static Object[][] parseWordDataException() {
-		String[] words = {
-				" word", "word ", "wo rd", ",word", "word;", "wo!rd", "_word",
-				"word_", "-word", "word-", "", " ", "?", "\n", "\t",
-				" Слово", "Слово ", "Сл во", ",Слово", "Слово;", "Сл!во", "_Слово",
-				"Слово_", "-Слово", "Слово-", "Сword", "wordС", "wСлово", "Словоw"};
-		Object[][] data = new Object[words.length][1];
-		for (int i = 0; i < words.length; i++) {
-			data[i][0] = words[i];
-		}
-		return data;
+		return new Object[][]{
+				{""      }, {" "     }, {"?"     }, {"\n"    }, {"\t"    }, {"0"     },
+				{"_"     }, {"-"     },
+				{" word" }, {"word " }, {"wo rd" }, {"!word" }, {"word!" }, {"wo!rd" },
+				{"\nword"}, {"word\n"}, {"wo\nrd"}, {"\tword"}, {"word\t"}, {"wo\trd"},
+				{"0word" }, {"word9" }, {"wo5rd" }, {"_word" }, {"word_" }, {"-word" },
+				{"word-" }
+		};
+	}
+
+	@DataProvider
+	public static Object[][] parseSentenceData() {
+		String sentence = "Сложение (+), вычитание и унарный минус (-), умножение (*), деление (/) и присвоение (=) работают одинаково фактически во всех языках программирования.";
+		return new Object[][] {{sentence}};
 	}
 
 	@Test(dataProvider = "parseWordData")
-	public void parseWordTest(String word, Word expected) {
-		CompositeTextPart tested = parser.parseWord(word);
-		assertEquals(tested, expected);
+	public void parseWordTest(String expectedWord) {
+		CompositeTextPart testedWord = parser.parseWord(expectedWord);
+		assertEquals(testedWord.toString(), expectedWord);
 	}
 
 	@Test(dataProvider = "parseWordDataException",
@@ -42,4 +46,9 @@ public class TestParser {
 		parser.parseWord(word);
 	}
 
+	@Test(dataProvider = "parseSentenceData")
+	public void parseSentenceTest(String expectedSentence) {
+		CompositeTextPart testedSentence = parser.parseSentence(expectedSentence);
+		assertEquals(testedSentence.toString(), expectedSentence);
+	}
 }
