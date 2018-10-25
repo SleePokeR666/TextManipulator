@@ -5,7 +5,7 @@ public enum ValidationPattern {
 	SYMBOL("\\w"),
 	WHITESPACE("\\p{Blank}"),
 	PUNCTUATION("\\p{Punct}"),
-	WORD("[A-Za-zА-я]|([A-Za-zА-я][A-Za-zА-я_-]*\\B[A-Za-zА-я])"),
+	WORD("[A-Za-zА-я]|(?:[A-Za-zА-я][A-Za-zА-я_-]*\\B[A-Za-zА-я])"),
 	SENTENCE(".+[!?.]"),
 	PARAGRAPH(""),
 	TEXT(""),

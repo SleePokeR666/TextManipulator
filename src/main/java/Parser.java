@@ -35,22 +35,21 @@ public class Parser {
 					"Предложение %s не подходит под заданный паттерн!", sentence));
 		}
 		List<TextPart> textParts = new ArrayList<>();
-		String regex = "([A-Za-zА-Яа-я-_]+)(\\p{Punct}*)(\\p{Blank}*)";
+		String regexWordGroup = "(" + ValidationPattern.WORD.getPattern() + ")";
+		String regexAfterWordGroup = "([" + ValidationPattern.WHITESPACE.getPattern() +
+				ValidationPattern.PUNCTUATION.getPattern() + "]+)";
+		String regex = regexWordGroup + regexAfterWordGroup;
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(sentence);
 		while (matcher.find()) {
 			textParts.add(new Word(matcher.group(1)));
-			if (!matcher.group(2).isEmpty()) {
-				if (matcher.group(2).length() > 1) {
-					for (int i = 0; i < matcher.group(2).length(); i++) {
-						textParts.add(new Punctuation(matcher.group(2).charAt(i)));
-					}
+			String afterWord = matcher.group(2);
+			for (int i = 0; i < afterWord.length(); i++) {
+				if (afterWord.charAt(i) == ' ') {
+					textParts.add(new WhiteSpace(afterWord.charAt(i)));
 				} else {
-					textParts.add(new Punctuation(matcher.group(2)));
+					textParts.add(new Punctuation(afterWord.charAt(i)));
 				}
-			}
-			if (!matcher.group(3).isEmpty()) {
-				textParts.add(new WhiteSpace(" "));
 			}
 		}
 		return new Sentence(textParts);
