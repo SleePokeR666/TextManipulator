@@ -36,9 +36,7 @@ public class TestParser implements TestParserData {
 
 	@DataProvider
 	public static Object[][] parseSentenceDataException() {
-		return new Object[][]{
-				{" Sentence."}, {"Sentence! "}, {"?Sentence!"}, {"Sentence.."}
-		};
+		return new Object[][]{{" Sentence."}, {"Sentence! "}, {"?Sentence!"}};
 	}
 
 	@Test(dataProvider = "parseWordData")
