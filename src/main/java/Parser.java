@@ -1,4 +1,5 @@
 import text.*;
+import text.Number;
 import util.ValidationPattern;
 
 import java.util.ArrayList;
@@ -22,18 +23,26 @@ public class Parser {
 	}
 
 	public CompositeTextPart parseWord(String word) {
-		if (!isTextPartValid(word, ValidationPattern.WORD)) {
-			throw new IllegalArgumentException(String.format(
-					"Слово %s не подходит под заданный паттерн!", word));
-		}
+		checkTextPart(word, ValidationPattern.WORD);
 		return new Word(word);
 	}
 
-	public CompositeTextPart parseSentence(String sentence) {
-		if (!isTextPartValid(sentence, ValidationPattern.SENTENCE)) {
-			throw new IllegalArgumentException(String.format(
-					"Предложение %s не подходит под заданный паттерн!", sentence));
+	public CompositeTextPart parseNumber(String number) {
+		checkTextPart(number, ValidationPattern.NUMBER);
+		Number result = new Number();
+		for (int i = 0; i < number.length(); i++) {
+			char current = number.charAt(i);
+			if (current == '.') {
+				result.add(new Punctuation(current));
+			} else {
+				result.add(new Digit(current));
+			}
 		}
+		return result;
+	}
+
+	public CompositeTextPart parseSentence(String sentence) {
+		checkTextPart(sentence, ValidationPattern.SENTENCE);
 		List<TextPart> textParts = new ArrayList<>();
 		String regexWordGroup = "(" + ValidationPattern.WORD.getPattern() + ")";
 		String regexAfterWordGroup = "([" + ValidationPattern.WHITESPACE.getPattern() +
@@ -55,8 +64,12 @@ public class Parser {
 		return new Sentence(textParts);
 	}
 
-	private boolean isTextPartValid(String textPart, ValidationPattern pattern) {
-		return textPart.matches(pattern.getPattern());
+	private void checkTextPart(String textPart, ValidationPattern pattern) {
+		if (!textPart.matches(pattern.getPattern())) {
+			String message = String.format("Argument value: %s doesn't match to %s pattern: %s",
+					textPart, pattern, pattern.getPattern());
+			throw new IllegalArgumentException(message);
+		}
 	}
 
 }
