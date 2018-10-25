@@ -25,13 +25,27 @@ public class TestParser implements TestParserData {
 				{" word" }, {"word " }, {"wo rd" }, {"!word" }, {"word!" }, {"wo!rd" },
 				{"\nword"}, {"word\n"}, {"wo\nrd"}, {"\tword"}, {"word\t"}, {"wo\trd"},
 				{"0word" }, {"word9" }, {"wo5rd" }, {"_word" }, {"word_" }, {"-word" },
-				{"word-" }
-		};
+				{"word-" }};
+	}
+
+	@DataProvider
+	public static Object[][] parseNumberData() {
+		return new Object[][]{{"12345.67890"}, {"1234567890"}, {".0123456789"}};
+	}
+
+	@DataProvider
+	public static Object[][] parseNumberDataException() {
+		return new Object[][]{
+				{".12345.67890"}, {"12345.67890."}, {".0123456789."}, {"012.3456.789"},
+				{" 1234567890" }, {"1234567890 " }, {"012345 6789" }, {"a0123456789" },
+				{"1234567890b" }, {"12345c67890" }, {";0123456789" }, {"a0123456789!"}};
 	}
 
 	@DataProvider
 	public static Object[][] parseSentenceData() {
-		return new Object[][] {{positiveSentence1}, {positiveSentence2}, {positiveSentence3}};
+		return new Object[][] {
+				{positiveSentence1}, {positiveSentence2}, {positiveSentence3},
+				{positiveSentence4}};
 	}
 
 	@DataProvider
@@ -49,6 +63,18 @@ public class TestParser implements TestParserData {
 			expectedExceptions = IllegalArgumentException.class)
 	public void parseWordTestException(String word) {
 		parser.parseWord(word);
+	}
+
+	@Test(dataProvider = "parseNumberData")
+	public void parseNumberTest(String expectedNumber) {
+		CompositeTextPart testedNumber = parser.parseNumber(expectedNumber);
+		assertEquals(testedNumber.toString(), expectedNumber);
+	}
+
+	@Test(dataProvider = "parseNumberDataException",
+			expectedExceptions = IllegalArgumentException.class)
+	public void parseNumberTestException(String number) {
+		parser.parseNumber(number);
 	}
 
 	@Test(dataProvider = "parseSentenceData")
