@@ -45,7 +45,7 @@ public class TestParser implements TestParserData {
 	public static Object[][] parseSentenceData() {
 		return new Object[][] {
 				{positiveSentence1}, {positiveSentence2}, {positiveSentence3},
-				{positiveSentence4}};
+				{positiveSentence4}, {positiveSentence5}, {positiveSentence6}};
 	}
 
 	@DataProvider
