@@ -8,10 +8,11 @@ public enum ValidationPattern {
 	PUNCTUATION("\\p{Punct}"),
 	WORD("[A-Za-zА-я]|(?:[A-Za-zА-я][A-Za-zА-я_-]*\\B[A-Za-zА-я])"),
 	NUMBER("\\d*[.]?\\d*"),
+	SIGNATURE("[\\w&&[^0-9_]]\\w*"),
 	SENTENCE("[^\\p{Punct}\\p{Space}].*[!?.]"),
-	PARAGRAPH(""),
+	PARAGRAPH("\\V+"),
 	TEXT(""),
-	LEXEME(""),
+	LEXEME("\\w+"),
 	LISTING("");
 
 	private String pattern;

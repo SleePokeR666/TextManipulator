@@ -2,8 +2,6 @@ import text.*;
 import text.Number;
 import util.ValidationPattern;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,20 +20,59 @@ public class Parser {
 		return instance;
 	}
 
+	public TextPart parseSymbol(char symbol) {
+		checkTextPart(String.valueOf(symbol), ValidationPattern.SYMBOL);
+		return new Symbol(symbol);
+	}
+
+	public TextPart parseDigit(char digit) {
+		checkTextPart(String.valueOf(digit), ValidationPattern.DIGIT);
+		return new Digit(digit);
+	}
+
+	public TextPart parseWhitespace(char whitespace) {
+		checkTextPart(String.valueOf(whitespace), ValidationPattern.WHITESPACE);
+		return new WhiteSpace(whitespace);
+	}
+
+	public TextPart parsePunctuation(char punctuation) {
+		checkTextPart(String.valueOf(punctuation), ValidationPattern.PUNCTUATION);
+		return new Punctuation(punctuation);
+	}
+
 	public CompositeTextPart parseWord(String word) {
 		checkTextPart(word, ValidationPattern.WORD);
-		return new Word(word);
+		CompositeTextPart result = new Word();
+		for (int i = 0; i < word.length(); i++) {
+			char current = word.charAt(i);
+			result.add(parseSymbol(current));
+		}
+		return result;
 	}
 
 	public CompositeTextPart parseNumber(String number) {
 		checkTextPart(number, ValidationPattern.NUMBER);
-		Number result = new Number();
+		CompositeTextPart result = new Number();
 		for (int i = 0; i < number.length(); i++) {
 			char current = number.charAt(i);
 			if (current == '.') {
-				result.add(new Punctuation(current));
+				result.add(parsePunctuation(current));
 			} else {
-				result.add(new Digit(current));
+				result.add(parseDigit(current));
+			}
+		}
+		return result;
+	}
+
+	public CompositeTextPart parseSignature(String signature) {
+		checkTextPart(signature, ValidationPattern.SIGNATURE);
+		CompositeTextPart result = new Signature();
+		for (int i = 0; i < signature.length(); i++) {
+			char current = signature.charAt(i);
+			if (String.valueOf(current).matches(ValidationPattern.DIGIT.getPattern())) {
+				result.add(parseDigit(current));
+			} else {
+				result.add(parseSymbol(current));
 			}
 		}
 		return result;
@@ -43,25 +80,44 @@ public class Parser {
 
 	public CompositeTextPart parseSentence(String sentence) {
 		checkTextPart(sentence, ValidationPattern.SENTENCE);
-		List<TextPart> textParts = new ArrayList<>();
-		String regexWordGroup = "(" + ValidationPattern.WORD.getPattern() + ")";
-		String regexAfterWordGroup = "([" + ValidationPattern.WHITESPACE.getPattern() +
-				ValidationPattern.PUNCTUATION.getPattern() + "]+)";
-		String regex = regexWordGroup + regexAfterWordGroup;
+		CompositeTextPart result = new Sentence();
+		String regex = constructSentenceRegex();
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(sentence);
 		while (matcher.find()) {
-			textParts.add(new Word(matcher.group(1)));
+			String wordOrNumber = matcher.group(1);
+			if (wordOrNumber.matches(ValidationPattern.WORD.getPattern())) {
+				result.add(parseWord(wordOrNumber));
+			} else if (wordOrNumber.matches(ValidationPattern.NUMBER.getPattern())){
+				result.add(parseNumber(wordOrNumber));
+			} else {
+				result.add(parseSignature(wordOrNumber));
+			}
+
 			String afterWord = matcher.group(2);
 			for (int i = 0; i < afterWord.length(); i++) {
-				if (afterWord.charAt(i) == ' ') {
-					textParts.add(new WhiteSpace(afterWord.charAt(i)));
+				char current = afterWord.charAt(i);
+				if (current == ' ') {
+					result.add(parseWhitespace(current));
 				} else {
-					textParts.add(new Punctuation(afterWord.charAt(i)));
+					result.add(parsePunctuation(current));
 				}
 			}
 		}
-		return new Sentence(textParts);
+		return result;
+	}
+
+	private String constructSentenceRegex() {
+		StringBuilder regex = new StringBuilder();
+		String regexWord = ValidationPattern.WORD.getPattern();
+		String regexNumber = ValidationPattern.NUMBER.getPattern();
+		String regexSignature = ValidationPattern.SIGNATURE.getPattern();
+
+		regex.append("((?:").append(regexWord).append(")|");
+		regex.append("(?:").append(regexNumber).append(")|");
+		regex.append("(?:").append(regexSignature).append("))");
+		regex.append("([\\p{Space}\\p{Punct}]+)");
+		return regex.toString();
 	}
 
 	private void checkTextPart(String textPart, ValidationPattern pattern) {
