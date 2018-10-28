@@ -53,6 +53,11 @@ public class TestParser implements TestParserData {
 		return new Object[][]{{" Sentence."}, {"Sentence! "}, {"?Sentence!"}};
 	}
 
+	@DataProvider
+	public static Object[][] parseParagraphDataException() {
+		return new Object[][]{{"\r\nParagraph"}, {"Paragraph\n\rParagraph"}, {"Paragraph\n\r"}};
+	}
+
 	@Test(dataProvider = "parseWordData")
 	public void parseWordTest(String expectedWord) {
 		CompositeTextPart testedWord = parser.parseWord(expectedWord);
@@ -87,5 +92,18 @@ public class TestParser implements TestParserData {
 			expectedExceptions = IllegalArgumentException.class)
 	public void parseSentenceTestException(String sentence) {
 		parser.parseSentence(sentence);
+	}
+
+	@Test
+	public void parseParagraphTest() {
+		String expectedParagraph = TestParserData.positiveParagraph;
+		CompositeTextPart testedParagraph = parser.parseParagraph(expectedParagraph);
+		assertEquals(testedParagraph.toString(), expectedParagraph);
+	}
+
+	@Test(dataProvider = "parseParagraphDataException",
+			expectedExceptions = IllegalArgumentException.class)
+	public void parseParagraphTestException(String paragraph) {
+		parser.parseParagraph(paragraph);
 	}
 }

@@ -9,7 +9,7 @@ public enum ValidationPattern {
 	WORD("[A-Za-zА-я]|(?:[A-Za-zА-я][A-Za-zА-я_-]*\\B[A-Za-zА-я])"),
 	NUMBER("\\d*[.]?\\d*"),
 	SIGNATURE("[\\w&&[^0-9_]]\\w*"),
-	SENTENCE("[^\\p{Punct}\\p{Space}].*?[!?.]"),
+	SENTENCE("[^\\p{Space}:!?.].*?[:!?.]"),
 	PARAGRAPH("\\V+"),
 	TEXT(""),
 	LEXEME("\\w+"),
