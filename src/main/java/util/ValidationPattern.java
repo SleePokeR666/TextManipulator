@@ -4,14 +4,13 @@ public enum ValidationPattern {
 
 	SYMBOL("[A-Za-zА-я_-]"),
 	DIGIT("\\d"),
-	WHITESPACE("\\p{Space}"),
+	WHITESPACE("[\\h\\v]"),
 	PUNCTUATION("[\\p{Punct}«»—]"),
 	WORD("[A-Za-zА-я]|(?:[A-Za-zА-я][A-Za-zА-я_-]*\\B[A-Za-zА-я])"),
 	NUMBER("\\d*[.]?\\d*"),
 	SIGNATURE("[\\w&&[^0-9_]]\\w*"),
-	SENTENCE("[^\\p{Space}:!?.].*?[:!?.]"),
+	SENTENCE("[^!?.].*?(?:[!?.]\\h|[!?.):]$)|(?:.+)"),
 	PARAGRAPH("\\V+"),
-	TEXT(""),
 	LEXEME("\\w+"),
 	LISTING("");
 

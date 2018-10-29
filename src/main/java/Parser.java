@@ -118,7 +118,7 @@ public class Parser {
 		regex.append("((?:").append(regexWord).append(")|");
 		regex.append("(?:").append(regexNumber).append(")|");
 		regex.append("(?:").append(regexSignature).append("))");
-		regex.append("([").append(regexWhitespace).append(regexPunctuation).append("]+)");
+		regex.append("([").append(regexWhitespace).append(regexPunctuation).append("]*)");
 		return regex.toString();
 	}
 
@@ -126,12 +126,32 @@ public class Parser {
 		checkTextPart(paragraph, ValidationPattern.PARAGRAPH);
 		CompositeTextPart result = new Paragraph();
 		String regexSentence = ValidationPattern.SENTENCE.getPattern();
-		String regex = "(" + regexSentence + ")(\\p{Space}?)";
+		String regex = "(\\h*)(" + regexSentence + ")";
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(paragraph);
 		while (matcher.find()) {
-			String sentence = matcher.group(1);
-			result.add(parseSentence(sentence));
+			if (!matcher.group(1).isEmpty()) {
+				String whitespace = matcher.group(1);
+				for (int i = 0; i < whitespace.length(); i++) {
+					char current = whitespace.charAt(i);
+					result.add(parseWhitespace(current));
+				}
+			}
+			result.add(parseSentence(matcher.group(2)));
+		}
+		return result;
+	}
+
+	public CompositeTextPart parseText(String text) {
+		CompositeTextPart result = new Text();
+		String regexParagraph = ValidationPattern.PARAGRAPH.getPattern();
+		String regex = "(" + regexParagraph + ")(\\R*)";
+
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(text);
+		while (matcher.find()) {
+			String paragraph = matcher.group(1);
+			result.add(parseParagraph(paragraph));
 			if (!matcher.group(2).isEmpty()) {
 				String whitespace = matcher.group(2);
 				for (int i = 0; i < whitespace.length(); i++) {
