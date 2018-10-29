@@ -57,7 +57,7 @@ abstract class ComplexTextPart implements CompositeTextPart {
 		return Objects.hash(getTextParts());
 	}
 
-	List<TextPart> getTextParts() {
+	public List<TextPart> getTextParts() {
 		return textParts;
 	}
 
