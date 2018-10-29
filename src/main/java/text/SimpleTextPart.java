@@ -1,5 +1,6 @@
 package text;
 
+import java.util.List;
 import java.util.Objects;
 
 public abstract class SimpleTextPart implements TextPart {
@@ -21,6 +22,16 @@ public abstract class SimpleTextPart implements TextPart {
 	@Override
 	public int length() {
 		return 1;
+	}
+
+	@Override
+	public List<TextPart> getTextParts() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public int countWords() {
+		return 0;
 	}
 
 	@Override

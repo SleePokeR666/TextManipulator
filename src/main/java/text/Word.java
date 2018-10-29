@@ -17,4 +17,8 @@ public class Word extends ComplexTextPart {
 		setTextParts(letters);
 	}
 
+	@Override
+	public int countWords() {
+		return 1;
+	}
 }

@@ -31,8 +31,12 @@ abstract class ComplexTextPart implements CompositeTextPart {
 	}
 
 	@Override
-	public void remove(TextPart textPart) {
-		textParts.remove(textPart);
+	public int countWords() {
+		int wordsNumber = 0;
+		for (TextPart textPart : getTextParts()) {
+			wordsNumber += textPart.countWords();
+		}
+		return wordsNumber;
 	}
 
 	@Override
@@ -57,6 +61,7 @@ abstract class ComplexTextPart implements CompositeTextPart {
 		return Objects.hash(getTextParts());
 	}
 
+	@Override
 	public List<TextPart> getTextParts() {
 		return textParts;
 	}
