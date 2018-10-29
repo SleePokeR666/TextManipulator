@@ -5,7 +5,7 @@ import util.ValidationPattern;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Parser {
+class Parser {
 
 	private static Parser instance;
 
@@ -13,46 +13,49 @@ public class Parser {
 
 	}
 
-	public static Parser getInstance() {
+	static Parser getInstance() {
 		if (instance == null) {
 			instance = new Parser();
 		}
 		return instance;
 	}
 
-	public TextPart parseSymbol(char symbol) {
+	private Symbol parseSymbol(char symbol) {
 		checkTextPart(String.valueOf(symbol), ValidationPattern.SYMBOL);
 		return new Symbol(symbol);
 	}
 
-	public TextPart parseDigit(char digit) {
+	private Digit parseDigit(char digit) {
 		checkTextPart(String.valueOf(digit), ValidationPattern.DIGIT);
 		return new Digit(digit);
 	}
 
-	public TextPart parseWhitespace(char whitespace) {
+	private WhiteSpace parseWhitespace(char whitespace) {
 		checkTextPart(String.valueOf(whitespace), ValidationPattern.WHITESPACE);
 		return new WhiteSpace(whitespace);
 	}
 
-	public TextPart parsePunctuation(char punctuation) {
+	private Punctuation parsePunctuation(char punctuation) {
 		checkTextPart(String.valueOf(punctuation), ValidationPattern.PUNCTUATION);
 		return new Punctuation(punctuation);
 	}
 
-	public CompositeTextPart parseWord(String word) {
+	Word parseWord(String word) {
 		checkTextPart(word, ValidationPattern.WORD);
-		CompositeTextPart result = new Word();
+		Word result = new Word();
+
 		for (int i = 0; i < word.length(); i++) {
 			char current = word.charAt(i);
 			result.add(parseSymbol(current));
 		}
+
 		return result;
 	}
 
-	public CompositeTextPart parseNumber(String number) {
+	Number parseNumber(String number) {
 		checkTextPart(number, ValidationPattern.NUMBER);
-		CompositeTextPart result = new Number();
+		Number result = new Number();
+
 		for (int i = 0; i < number.length(); i++) {
 			char current = number.charAt(i);
 			if (current == '.') {
@@ -61,12 +64,14 @@ public class Parser {
 				result.add(parseDigit(current));
 			}
 		}
+
 		return result;
 	}
 
-	public CompositeTextPart parseSignature(String signature) {
+	Signature parseSignature(String signature) {
 		checkTextPart(signature, ValidationPattern.SIGNATURE);
-		CompositeTextPart result = new Signature();
+		Signature result = new Signature();
+
 		for (int i = 0; i < signature.length(); i++) {
 			char current = signature.charAt(i);
 			if (String.valueOf(current).matches(ValidationPattern.DIGIT.getPattern())) {
@@ -75,60 +80,64 @@ public class Parser {
 				result.add(parseSymbol(current));
 			}
 		}
+
 		return result;
 	}
 
-	public CompositeTextPart parseSentence(String sentence) {
+	Sentence parseSentence(String sentence) {
 		checkTextPart(sentence, ValidationPattern.SENTENCE);
-		CompositeTextPart result = new Sentence();
+		Sentence result = new Sentence();
 		String regex = constructSentenceRegex();
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(sentence);
-		while (matcher.find()) {
-			String wordOrNumber = matcher.group(1);
-			if (wordOrNumber.matches(ValidationPattern.WORD.getPattern())) {
-				result.add(parseWord(wordOrNumber));
-			} else if (wordOrNumber.matches(ValidationPattern.NUMBER.getPattern())){
-				result.add(parseNumber(wordOrNumber));
-			} else {
-				result.add(parseSignature(wordOrNumber));
-			}
 
-			String afterWord = matcher.group(2);
-			for (int i = 0; i < afterWord.length(); i++) {
-				char current = afterWord.charAt(i);
-				if (current == ' ') {
-					result.add(parseWhitespace(current));
-				} else {
-					result.add(parsePunctuation(current));
-				}
+		while (matcher.find()) {
+			if (matcher.group(1) != null && !matcher.group(1).isEmpty()) {
+				result.add(parseSignature(matcher.group(1)));
+			} else if (matcher.group(2) != null && !matcher.group(2).isEmpty()) {
+				result.add(parseWord(matcher.group(2)));
+			} else if (matcher.group(3) != null && !matcher.group(3).isEmpty()){
+				result.add(parseNumber(matcher.group(3)));
+			}
+			if (matcher.group(4) != null && !matcher.group(4).isEmpty()) {
+				fillDelimitersGroup(matcher.group(4), result);
 			}
 		}
+
 		return result;
 	}
 
 	private String constructSentenceRegex() {
-		StringBuilder regex = new StringBuilder();
 		String regexWord = ValidationPattern.WORD.getPattern();
 		String regexNumber = ValidationPattern.NUMBER.getPattern();
 		String regexSignature = ValidationPattern.SIGNATURE.getPattern();
 		String regexWhitespace = ValidationPattern.WHITESPACE.getPattern();
 		String regexPunctuation = ValidationPattern.PUNCTUATION.getPattern();
 
-		regex.append("((?:").append(regexWord).append(")|");
-		regex.append("(?:").append(regexNumber).append(")|");
-		regex.append("(?:").append(regexSignature).append("))");
-		regex.append("([").append(regexWhitespace).append(regexPunctuation).append("]*)");
-		return regex.toString();
+		String delimitersGroup = String.format("[%s%s]*", regexWhitespace, regexPunctuation);
+		return String.format("(?:(%s)|(%s)|(%s))(%s)", regexSignature, regexWord,	regexNumber,
+				delimitersGroup);
 	}
 
-	public CompositeTextPart parseParagraph(String paragraph) {
+	private void fillDelimitersGroup(String delimiters, Sentence sentence) {
+		for (int i = 0; i < delimiters.length(); i++) {
+			char current = delimiters.charAt(i);
+			if (current == ' ') {
+				sentence.add(parseWhitespace(current));
+			} else {
+				sentence.add(parsePunctuation(current));
+			}
+		}
+	}
+
+	Paragraph parseParagraph(String paragraph) {
 		checkTextPart(paragraph, ValidationPattern.PARAGRAPH);
-		CompositeTextPart result = new Paragraph();
+		Paragraph result = new Paragraph();
 		String regexSentence = ValidationPattern.SENTENCE.getPattern();
-		String regex = "(\\h*)(" + regexSentence + ")";
+		String regex = String.format("(\\h*)(%s)", regexSentence);
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(paragraph);
+
 		while (matcher.find()) {
 			if (!matcher.group(1).isEmpty()) {
 				String whitespace = matcher.group(1);
@@ -139,16 +148,17 @@ public class Parser {
 			}
 			result.add(parseSentence(matcher.group(2)));
 		}
+
 		return result;
 	}
 
-	public CompositeTextPart parseText(String text) {
-		CompositeTextPart result = new Text();
+	Text parseText(String text) {
+		Text result = new Text();
 		String regexParagraph = ValidationPattern.PARAGRAPH.getPattern();
-		String regex = "(" + regexParagraph + ")(\\R*)";
-
+		String regex = String.format("(%s)(\\R*)", regexParagraph);
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(text);
+
 		while (matcher.find()) {
 			String paragraph = matcher.group(1);
 			result.add(parseParagraph(paragraph));
@@ -160,6 +170,7 @@ public class Parser {
 				}
 			}
 		}
+
 		return result;
 	}
 
@@ -167,6 +178,7 @@ public class Parser {
 		if (!textPart.matches(pattern.getPattern())) {
 			String message = String.format("Argument value: %s doesn't match to %s pattern: %s",
 					textPart, pattern, pattern.getPattern());
+
 			throw new IllegalArgumentException(message);
 		}
 	}
