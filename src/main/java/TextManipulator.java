@@ -1,6 +1,12 @@
+import text.Text;
+import text.TextPart;
+
+import java.util.List;
+
 public interface TextManipulator {
 
-	void parse(String text);
+	Text parse(String text);
 
-	void sortSentencesByWordsNumber();
+	List<TextPart> sortSentencesByWordsNumber(Text text);
+
 }
