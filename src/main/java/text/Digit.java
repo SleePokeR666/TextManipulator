@@ -1,5 +1,8 @@
 package text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Digit extends SimpleTextPart {
 
 	public Digit() {
@@ -12,5 +15,12 @@ public class Digit extends SimpleTextPart {
 
 	public Digit(String symbol) {
 		super(symbol);
+	}
+
+	@Override
+	public List<Digit> getDigits() {
+		List<Digit> digits = new ArrayList<>();
+		digits.add(this);
+		return digits;
 	}
 }

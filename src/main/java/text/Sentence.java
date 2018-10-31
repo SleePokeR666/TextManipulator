@@ -1,5 +1,6 @@
 package text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sentence extends ComplexTextPart {
@@ -12,4 +13,10 @@ public class Sentence extends ComplexTextPart {
 		super(textParts);
 	}
 
+	@Override
+	public List<Sentence> getSentences() {
+		List<Sentence> sentences = new ArrayList<>();
+		sentences.add(this);
+		return sentences;
+	}
 }

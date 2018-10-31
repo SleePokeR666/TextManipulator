@@ -13,26 +13,15 @@ public class Text extends ComplexTextPart {
 		super(textParts);
 	}
 
-	public List<TextPart> getAllParagraphs() {
-		List<TextPart> paragraphs = new ArrayList<>();
+	@Override
+	public List<Paragraph> getParagraphs() {
+		List<Paragraph> result = new ArrayList<>();
 		for (TextPart textPart : getTextParts()) {
-			if (textPart instanceof Paragraph) {
-				paragraphs.add(textPart);
+			List<Paragraph> paragraphs = textPart.getParagraphs();
+			if (paragraphs != null) {
+				result.addAll(paragraphs);
 			}
 		}
-		return paragraphs;
-	}
-
-	public List<TextPart> getAllSentences() {
-		List<TextPart> paragraphs = getAllParagraphs();
-		List<TextPart> sentences = new ArrayList<>();
-		for (TextPart paragraph : paragraphs) {
-			for (TextPart textPart : paragraph.getTextParts()) {
-				if (textPart instanceof Sentence) {
-					sentences.add(textPart);
-				}
-			}
-		}
-		return sentences;
+		return result;
 	}
 }

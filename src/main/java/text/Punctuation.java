@@ -1,5 +1,8 @@
 package text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Punctuation extends SimpleTextPart {
 
 	public Punctuation() {
@@ -14,4 +17,10 @@ public class Punctuation extends SimpleTextPart {
 		super(symbol);
 	}
 
+	@Override
+	public List<Punctuation> getPunctuations() {
+		List<Punctuation> punctuations = new ArrayList<>();
+		punctuations.add(this);
+		return punctuations;
+	}
 }

@@ -9,12 +9,30 @@ public class Word extends ComplexTextPart {
 		super();
 	}
 
-	public Word(String word) {
-		List<TextPart> letters = new ArrayList<>();
-		for (int i = 0; i < word.length(); i++) {
-			letters.add(new Symbol(word.charAt(i)));
-		}
-		setTextParts(letters);
+	public Word(List<TextPart> textParts) {
+		super(textParts);
+	}
+
+	@Override
+	public List<Word> getWords() {
+		List<Word> words = new ArrayList<>();
+		words.add(this);
+		return words;
+	}
+
+	@Override
+	public List<Number> getNumbers() {
+		return null;
+	}
+
+	@Override
+	public List<Signature> getSignatures() {
+		return null;
+	}
+
+	@Override
+	public List<Sentence> getSentences() {
+		return null;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Paragraph extends ComplexTextPart {
@@ -10,5 +11,12 @@ public class Paragraph extends ComplexTextPart {
 
 	public Paragraph(List<TextPart> textParts) {
 		super(textParts);
+	}
+
+	@Override
+	public List<Paragraph> getParagraphs() {
+		List<Paragraph> paragraphs = new ArrayList<>();
+		paragraphs.add(this);
+		return paragraphs;
 	}
 }

@@ -2,6 +2,6 @@ package text;
 
 public interface CompositeTextPart extends TextPart {
 
-	void add(TextPart textPart);
+	boolean add(TextPart textPart);
 
 }

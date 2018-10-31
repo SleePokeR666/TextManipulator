@@ -1,6 +1,5 @@
 package text;
 
-import java.util.List;
 import java.util.Objects;
 
 public abstract class SimpleTextPart implements TextPart {
@@ -17,21 +16,6 @@ public abstract class SimpleTextPart implements TextPart {
 
 	SimpleTextPart(String symbol) {
 		this.symbol = symbol.charAt(0);
-	}
-
-	@Override
-	public int length() {
-		return 1;
-	}
-
-	@Override
-	public List<TextPart> getTextParts() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int countWords() {
-		return 0;
 	}
 
 	@Override
@@ -52,11 +36,4 @@ public abstract class SimpleTextPart implements TextPart {
 		return Objects.hash(symbol);
 	}
 
-	public char getSymbol() {
-		return symbol;
-	}
-
-	public void setSymbol(char symbol) {
-		this.symbol = symbol;
-	}
 }

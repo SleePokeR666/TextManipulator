@@ -1,5 +1,8 @@
 package text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WhiteSpace extends SimpleTextPart {
 
 	public WhiteSpace() {
@@ -14,4 +17,10 @@ public class WhiteSpace extends SimpleTextPart {
 		super(symbol);
 	}
 
+	@Override
+	public List<WhiteSpace> getWhitespaces() {
+		List<WhiteSpace> whiteSpaces = new ArrayList<>();
+		whiteSpaces.add(this);
+		return whiteSpaces;
+	}
 }

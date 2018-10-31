@@ -1,5 +1,8 @@
 package text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Symbol extends SimpleTextPart {
 
 	public Symbol() {
@@ -14,4 +17,10 @@ public class Symbol extends SimpleTextPart {
 		super(symbol);
 	}
 
+	@Override
+	public List<Symbol> getSymbols() {
+		List<Symbol> symbols = new ArrayList<>();
+		symbols.add(this);
+		return symbols;
+	}
 }
