@@ -58,7 +58,9 @@ public class Manipulator implements TextManipulator {
 
 	@Override
 	public Text parse(String text) {
-		return PARSER.parseText(text);
+		Text result = PARSER.parseText(text);
+		LOG.info(text);
+		return result;
 	}
 
 	@Override
