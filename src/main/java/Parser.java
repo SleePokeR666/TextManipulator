@@ -1,3 +1,5 @@
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import text.*;
 import text.Number;
 import util.ValidationPattern;
@@ -7,6 +9,7 @@ import java.util.regex.Pattern;
 
 class Parser {
 
+	private final static Logger LOG = LogManager.getLogger();
 	private static Parser instance;
 
 	private Parser() {
@@ -159,6 +162,7 @@ class Parser {
 			String message = String.format("Argument value: %s doesn't match to %s pattern: %s",
 					textPart, pattern, pattern.getPattern());
 
+			LOG.error(message);
 			throw new IllegalArgumentException(message);
 		}
 	}
