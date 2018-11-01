@@ -8,7 +8,6 @@ public enum ValidationPattern {
 	PUNCTUATION("[\\p{Punct}«»—]"),
 	WORD("\\b[A-Za-zА-я]\\b|(?:\\b[A-Za-zА-я][A-Za-zА-я_-]*\\B[A-Za-zА-я]\\b)"),
 	NUMBER("\\d*[.]?\\d*"),
-	SIGNATURE("[\\w&&[^0-9_]]\\w+"),
 	SENTENCE("[^!?.].*?(?:[!?.]\\h|[!?.):]$)|(?:.+)"),
 	PARAGRAPH("\\V+"),
 	LEXEME("\\w+"),

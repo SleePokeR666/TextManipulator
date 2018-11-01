@@ -40,7 +40,7 @@ class Parser {
 		return new Punctuation(punctuation);
 	}
 
-	Word parseWord(String word) {
+	private Word parseWord(String word) {
 		checkTextPart(word, ValidationPattern.WORD);
 		Word result = new Word();
 
@@ -52,7 +52,7 @@ class Parser {
 		return result;
 	}
 
-	Number parseNumber(String number) {
+	private Number parseNumber(String number) {
 		checkTextPart(number, ValidationPattern.NUMBER);
 		Number result = new Number();
 
@@ -68,23 +68,7 @@ class Parser {
 		return result;
 	}
 
-	Signature parseSignature(String signature) {
-		checkTextPart(signature, ValidationPattern.SIGNATURE);
-		Signature result = new Signature();
-
-		for (int i = 0; i < signature.length(); i++) {
-			char current = signature.charAt(i);
-			if (String.valueOf(current).matches(ValidationPattern.DIGIT.getPattern())) {
-				result.add(parseDigit(current));
-			} else {
-				result.add(parseSymbol(current));
-			}
-		}
-
-		return result;
-	}
-
-	Sentence parseSentence(String sentence) {
+	private Sentence parseSentence(String sentence) {
 		checkTextPart(sentence, ValidationPattern.SENTENCE);
 		Sentence result = new Sentence();
 		String regex = constructSentenceRegex();
@@ -93,14 +77,12 @@ class Parser {
 
 		while (matcher.find()) {
 			if (matcher.group(1) != null && !matcher.group(1).isEmpty()) {
-				result.add(parseSignature(matcher.group(1)));
+				result.add(parseWord(matcher.group(1)));
 			} else if (matcher.group(2) != null && !matcher.group(2).isEmpty()) {
-				result.add(parseWord(matcher.group(2)));
-			} else if (matcher.group(3) != null && !matcher.group(3).isEmpty()){
-				result.add(parseNumber(matcher.group(3)));
+				result.add(parseNumber(matcher.group(2)));
 			}
-			if (matcher.group(4) != null && !matcher.group(4).isEmpty()) {
-				fillDelimitersGroup(matcher.group(4), result);
+			if (matcher.group(3) != null && !matcher.group(3).isEmpty()) {
+				fillDelimitersGroup(matcher.group(3), result);
 			}
 		}
 
@@ -110,13 +92,11 @@ class Parser {
 	private String constructSentenceRegex() {
 		String regexWord = ValidationPattern.WORD.getPattern();
 		String regexNumber = ValidationPattern.NUMBER.getPattern();
-		String regexSignature = ValidationPattern.SIGNATURE.getPattern();
 		String regexWhitespace = ValidationPattern.WHITESPACE.getPattern();
 		String regexPunctuation = ValidationPattern.PUNCTUATION.getPattern();
 
 		String delimitersGroup = String.format("[%s%s]*", regexWhitespace, regexPunctuation);
-		return String.format("(?:(%s)|(%s)|(%s))(%s)", regexSignature, regexWord,	regexNumber,
-				delimitersGroup);
+		return String.format("(?:(%s)|(%s))(%s)", regexWord, regexNumber, delimitersGroup);
 	}
 
 	private void fillDelimitersGroup(String delimiters, Sentence sentence) {
@@ -130,7 +110,7 @@ class Parser {
 		}
 	}
 
-	Paragraph parseParagraph(String paragraph) {
+	private Paragraph parseParagraph(String paragraph) {
 		checkTextPart(paragraph, ValidationPattern.PARAGRAPH);
 		Paragraph result = new Paragraph();
 		String regexSentence = ValidationPattern.SENTENCE.getPattern();

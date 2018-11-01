@@ -1,4 +1,3 @@
-import text.Sentence;
 import text.Text;
 import text.TextPart;
 
@@ -21,16 +20,8 @@ public class Manipulator implements TextManipulator {
 
 	@Override
 	public List<TextPart> sortSentencesByWordsNumber(Text text) {
-		List<Sentence> sentences = text.getSentences();
-		List<TextPart> result = new ArrayList<>(sentences);
-
-		result.sort(new Comparator<TextPart>() {
-			@Override
-			public int compare(TextPart o1, TextPart o2) {
-				return o1.countWords() - o2.countWords();
-			}
-		});
-
+		List<TextPart> result = new ArrayList<>(text.getSentences());
+		result.sort(Comparator.comparingInt(TextPart::countWords));
 		return result;
 	}
 }
