@@ -147,9 +147,9 @@ abstract class ComplexTextPart implements CompositeTextPart {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Word word = (Word) o;
-		return getTextParts().equals(word.getTextParts());
+		if (!(o instanceof ComplexTextPart)) return false;
+		ComplexTextPart that = (ComplexTextPart) o;
+		return getTextParts().equals(that.getTextParts());
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import text.Text;
-import text.TextPart;
+import text.*;
+import text.Number;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -14,6 +14,46 @@ public class Manipulator implements TextManipulator {
 
 	public Manipulator() {
 
+	}
+
+	@Override
+	public Symbol parseSymbol(char symbol) {
+		return PARSER.parseSymbol(symbol);
+	}
+
+	@Override
+	public Digit parseDigit(char digit) {
+		return PARSER.parseDigit(digit);
+	}
+
+	@Override
+	public WhiteSpace parseWhitespace(char whitespace) {
+		return PARSER.parseWhitespace(whitespace);
+	}
+
+	@Override
+	public Punctuation parsePunctuation(char punctuation) {
+		return PARSER.parsePunctuation(punctuation);
+	}
+
+	@Override
+	public Word parseWord(String word) {
+		return PARSER.parseWord(word);
+	}
+
+	@Override
+	public Number parseNumber(String number) {
+		return PARSER.parseNumber(number);
+	}
+
+	@Override
+	public Sentence parseSentence(String sentence) {
+		return PARSER.parseSentence(sentence);
+	}
+
+	@Override
+	public Paragraph parseParagraph(String paragraph) {
+		return PARSER.parseParagraph(paragraph);
 	}
 
 	@Override

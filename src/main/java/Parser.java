@@ -23,27 +23,27 @@ class Parser {
 		return instance;
 	}
 
-	private Symbol parseSymbol(char symbol) {
+	Symbol parseSymbol(char symbol) {
 		checkTextPart(String.valueOf(symbol), ValidationPattern.SYMBOL);
 		return new Symbol(symbol);
 	}
 
-	private Digit parseDigit(char digit) {
+	Digit parseDigit(char digit) {
 		checkTextPart(String.valueOf(digit), ValidationPattern.DIGIT);
 		return new Digit(digit);
 	}
 
-	private WhiteSpace parseWhitespace(char whitespace) {
+	WhiteSpace parseWhitespace(char whitespace) {
 		checkTextPart(String.valueOf(whitespace), ValidationPattern.WHITESPACE);
 		return new WhiteSpace(whitespace);
 	}
 
-	private Punctuation parsePunctuation(char punctuation) {
+	Punctuation parsePunctuation(char punctuation) {
 		checkTextPart(String.valueOf(punctuation), ValidationPattern.PUNCTUATION);
 		return new Punctuation(punctuation);
 	}
 
-	private Word parseWord(String word) {
+	Word parseWord(String word) {
 		checkTextPart(word, ValidationPattern.WORD);
 		Word result = new Word();
 
@@ -55,7 +55,7 @@ class Parser {
 		return result;
 	}
 
-	private Number parseNumber(String number) {
+	Number parseNumber(String number) {
 		checkTextPart(number, ValidationPattern.NUMBER);
 		Number result = new Number();
 
@@ -71,7 +71,7 @@ class Parser {
 		return result;
 	}
 
-	private Sentence parseSentence(String sentence) {
+	Sentence parseSentence(String sentence) {
 		checkTextPart(sentence, ValidationPattern.SENTENCE);
 		Sentence result = new Sentence();
 		String regex = constructSentenceRegex();
@@ -113,7 +113,7 @@ class Parser {
 		}
 	}
 
-	private Paragraph parseParagraph(String paragraph) {
+	Paragraph parseParagraph(String paragraph) {
 		checkTextPart(paragraph, ValidationPattern.PARAGRAPH);
 		Paragraph result = new Paragraph();
 		String regexSentence = ValidationPattern.SENTENCE.getPattern();
