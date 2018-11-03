@@ -1,11 +1,16 @@
+import org.apache.commons.io.FileUtils;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import text.Number;
 import text.*;
 import util.TestManipulatorData;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.testng.Assert.assertEquals;
 
@@ -94,26 +99,46 @@ public class TestManipulator implements TestManipulatorData {
 			"parseNumberTest", "parseWordTest"},
 			groups = "ComplexTextPartTest")
 	public void parseParagraph() {
-		TextPart[] textParts = {
-				manipulator.parseSentence(sentence1), manipulator.parseWhitespace(' '),
-				manipulator.parseSentence(sentence3)};
-
-		Paragraph expectedParagraph = new Paragraph(Arrays.asList(textParts));
-
 		Paragraph tested = manipulator.parseParagraph(paragraph);
-		assertEquals(tested.toString(), expectedParagraph.toString());
+		assertEquals(tested.toString(), paragraph);
 	}
 
 	@Test(dependsOnGroups = {"SimpleTextPartTest", "ComplexTextPartTest"})
 	public void parseTest() {
-		String expectedText = text;
+		String expectedText = "";
+		File file = new File("src/test/resources/parseTestInput.txt");
+		try {
+			expectedText = FileUtils.readFileToString(file, Charset.forName("UTF-8"));
+		} catch (IOException e) {
+			System.err.println("Ошибка чтения файла " + file.getPath());
+			e.printStackTrace();
+		}
+
 		Text testedText = manipulator.parse(expectedText);
 		assertEquals(testedText.toString(), expectedText);
 	}
 
-	@Test(dependsOnMethods = "parseTest")
+	@Test(dependsOnMethods = "parseTest", dependsOnGroups = {"SimpleTextPartTest", "ComplexTextPartTest"})
 	public void sortSentencesByWordsNumberTest() {
-		Text parsedText = manipulator.parse(text);
-		manipulator.sortSentencesByWordsNumber(parsedText);
+		String expectedText = "";
+		String testedText = "";
+		File file = new File("src/test/resources/sortSentencesByWordsNumberTestExpected.txt");
+		File testedFile = new File("src/test/resources/sortSentencesByWordsNumberTestInput.txt");
+		try {
+			expectedText = FileUtils.readFileToString(file, Charset.forName("UTF-8"));
+			testedText = FileUtils.readFileToString(testedFile, Charset.forName("UTF-8"));
+		} catch (IOException e) {
+			System.err.println("Ошибка чтения файла " + file.getPath());
+			e.printStackTrace();
+		}
+		List<String> expectedSentences = Arrays.asList(expectedText.split("\n"));
+
+		Text parsedText = manipulator.parse(testedText);
+		List<TextPart> testedSentences = manipulator.sortSentencesByWordsNumber(parsedText);
+
+		assertEquals(expectedSentences,
+				testedSentences.stream()
+						.map(Object::toString)
+						.collect(Collectors.toList()));
 	}
 }
