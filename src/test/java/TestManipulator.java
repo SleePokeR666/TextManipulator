@@ -138,7 +138,7 @@ public class TestManipulator implements TestManipulatorData {
 
 		assertEquals(expectedSentences,
 				testedSentences.stream()
-						.map(Object::toString)
+						.map(TextPart::toString)
 						.collect(Collectors.toList()));
 	}
 }
