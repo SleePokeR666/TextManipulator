@@ -73,7 +73,8 @@ public class Manipulator implements TextManipulator {
 
 	private void logList(List<TextPart> text) {
 		for (int i = 0; i < text.size(); i++) {
-			String message = String.format("Item №%d ---> %s", i, text.get(i));
+			String message = String.format("Item №%d. Words number %d---> %s",
+					i, text.get(i).countWords(), text.get(i));
 			LOG.info(message);
 		}
 	}
