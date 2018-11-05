@@ -9,9 +9,7 @@ public enum ValidationPattern {
 	WORD("\\b[A-Za-zА-я]\\b|(?:\\b[A-Za-zА-я][A-Za-zА-я_-]*\\B[A-Za-zА-я]\\b)"),
 	NUMBER("\\d*[.]?\\d*"),
 	SENTENCE("[^!?.].*?(?:[!?.]\\h|[!?.):]$)|(?:.+)"),
-	PARAGRAPH("\\V+"),
-	LEXEME("\\w+"),
-	LISTING("");
+	PARAGRAPH("\\V+");
 
 	private String pattern;
 

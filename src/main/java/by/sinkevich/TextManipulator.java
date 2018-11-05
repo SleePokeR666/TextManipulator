@@ -1,8 +1,10 @@
 package by.sinkevich;
 
-import by.sinkevich.text.*;
 import by.sinkevich.text.Number;
+import by.sinkevich.text.*;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public interface TextManipulator {
@@ -24,6 +26,8 @@ public interface TextManipulator {
 	Paragraph parseParagraph(String paragraph);
 
 	Text parseText(String text);
+
+	Text parse(InputStream stream) throws IOException;
 
 	List<TextPart> sortSentencesByWordsNumber(Text text);
 

@@ -1,10 +1,12 @@
 package by.sinkevich;
 
+import by.sinkevich.text.Number;
+import by.sinkevich.text.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import by.sinkevich.text.*;
-import by.sinkevich.text.Number;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -63,6 +65,10 @@ public class TextManipulatorParser implements TextManipulator {
 		Text result = PARSER.parseText(text);
 		LOG.info(text);
 		return result;
+	}
+
+	public Text parse(InputStream stream) throws IOException {
+		return PARSER.parse(stream);
 	}
 
 	@Override

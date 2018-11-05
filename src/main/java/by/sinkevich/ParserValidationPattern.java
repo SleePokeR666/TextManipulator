@@ -1,11 +1,15 @@
 package by.sinkevich;
 
+import by.sinkevich.text.Number;
+import by.sinkevich.text.*;
+import by.sinkevich.util.ValidationPattern;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import by.sinkevich.text.*;
-import by.sinkevich.text.Number;
-import by.sinkevich.util.ValidationPattern;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -167,6 +171,11 @@ class ParserValidationPattern {
 			LOG.error(message);
 			throw new IllegalArgumentException(message);
 		}
+	}
+
+	Text parse(InputStream stream) throws IOException {
+		String result = IOUtils.toString(stream, Charset.forName("UTF-8"));
+		return parseText(result);
 	}
 
 }
