@@ -1,13 +1,14 @@
 package by.sinkevich;
 
+import by.sinkevich.text.Number;
+import by.sinkevich.text.*;
 import org.apache.commons.io.FileUtils;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import by.sinkevich.text.Number;
-import by.sinkevich.text.*;
-import by.sinkevich.util.TestManipulatorData;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 import static org.testng.Assert.assertEquals;
 
-public class TestTextManipulatorParser implements TestManipulatorData {
+public class TestTextManipulatorParser {
 
 	private TextManipulatorParser manipulator = new TextManipulatorParser();
 
@@ -47,7 +48,20 @@ public class TestTextManipulatorParser implements TestManipulatorData {
 
 	@DataProvider
 	public static Object[][] parseSentenceTestData() {
-		return new Object[][]{{sentence1}, {sentence2}, {sentence3}};
+		File file = new File("src/test/resources/parseSentenceTest.txt");
+		String[] sentences = readFile(file).split("\n");
+		return new Object[][]{{sentences[0]}, {sentences[1]}, {sentences[2]}};
+	}
+
+	private static String readFile(File file) {
+		String result = "";
+		try {
+			result = FileUtils.readFileToString(file, "UTF-8");
+		} catch (IOException e) {
+			System.err.println("Ошибка чтения файла " + file.getPath());
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Test(dataProvider = "parseSymbolTestData", groups = "SimpleTextPartTest")
@@ -100,9 +114,11 @@ public class TestTextManipulatorParser implements TestManipulatorData {
 	@Test(dependsOnGroups = "SimpleTextPartTest", dependsOnMethods = {"parseSentenceTest",
 			"parseNumberTest", "parseWordTest"},
 			groups = "ComplexTextPartTest")
-	public void parseParagraph() {
-		Paragraph tested = manipulator.parseParagraph(paragraph);
-		assertEquals(tested.toString(), paragraph);
+	public void parseParagraphTest() {
+		File file = new File("src/test/resources/parseParagraphTest.txt");
+		String expected = readFile(file);
+		Paragraph tested = manipulator.parseParagraph(expected);
+		assertEquals(tested.toString(), expected);
 	}
 
 	@Test(dependsOnGroups = {"SimpleTextPartTest", "ComplexTextPartTest"})
@@ -122,25 +138,37 @@ public class TestTextManipulatorParser implements TestManipulatorData {
 
 	@Test(dependsOnMethods = "parseTextTest", dependsOnGroups = {"SimpleTextPartTest", "ComplexTextPartTest"})
 	public void sortSentencesByWordsNumberTest() {
-		String expectedText = "";
-		String testedText = "";
 		File file = new File("src/test/resources/sortSentencesByWordsNumberTestExpected.txt");
 		File testedFile = new File("src/test/resources/sortSentencesByWordsNumberTestInput.txt");
-		try {
-			expectedText = FileUtils.readFileToString(file, Charset.forName("UTF-8"));
-			testedText = FileUtils.readFileToString(testedFile, Charset.forName("UTF-8"));
-		} catch (IOException e) {
-			System.err.println("Ошибка чтения файла " + file.getPath());
-			e.printStackTrace();
-		}
+		String expectedText = readFile(file);
+		String testedText = readFile(testedFile);
+
 		List<String> expectedSentences = Arrays.asList(expectedText.split("\n"));
 
 		Text parsedText = manipulator.parseText(testedText);
 		List<TextPart> testedSentences = manipulator.sortSentencesByWordsNumber(parsedText);
 
-		assertEquals(expectedSentences,
-				testedSentences.stream()
-						.map(TextPart::toString)
-						.collect(Collectors.toList()));
+		assertEquals(testedSentences.stream()
+				.map(TextPart::toString)
+				.collect(Collectors.toList()), expectedSentences);
+	}
+
+	@Test(dependsOnGroups = {"SimpleTextPartTest", "ComplexTextPartTest"})
+	public void parseTest() {
+		File file = new File("src/test/resources/parseTestInput.txt");
+		String expectedText = readFile(file);
+		Text tested = new Text();
+
+		try (FileInputStream fis = new FileInputStream(file)) {
+			tested = manipulator.parse(fis);
+		} catch (FileNotFoundException e) {
+			System.err.println("Файл не найден " + file.getPath());
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.err.println("Ошибка чтения файла " + file.getPath());
+			e.printStackTrace();
+		}
+
+		assertEquals(expectedText, tested.toString());
 	}
 }
