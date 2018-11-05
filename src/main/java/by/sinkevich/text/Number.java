@@ -1,15 +1,15 @@
-package text;
+package by.sinkevich.text;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Signature extends ComplexTextPart {
+public class Number extends ComplexTextPart {
 
-	public Signature() {
+	public Number() {
 		super();
 	}
 
-	public Signature(List<TextPart> textParts) {
+	public Number(List<TextPart> textParts) {
 		super(textParts);
 	}
 
@@ -20,19 +20,14 @@ public class Signature extends ComplexTextPart {
 
 	@Override
 	public List<Number> getNumbers() {
-		return null;
+		List<Number> numbers = new ArrayList<>();
+		numbers.add(this);
+		return numbers;
 	}
 
 	@Override
 	public List<Signature> getSignatures() {
-		List<Signature> signatures = new ArrayList<>();
-		signatures.add(this);
-		return signatures;
-	}
-
-	@Override
-	public int countWords() {
-		return 1;
+		return null;
 	}
 
 	@Override

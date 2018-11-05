@@ -1,24 +1,26 @@
+package by.sinkevich;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import text.*;
-import text.Number;
-import util.ValidationPattern;
+import by.sinkevich.text.*;
+import by.sinkevich.text.Number;
+import by.sinkevich.util.ValidationPattern;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class Parser {
+class ParserValidationPattern {
 
 	private final static Logger LOG = LogManager.getLogger();
-	private static Parser instance;
+	private static ParserValidationPattern instance;
 
-	private Parser() {
+	private ParserValidationPattern() {
 
 	}
 
-	static Parser getInstance() {
+	static ParserValidationPattern getInstance() {
 		if (instance == null) {
-			instance = new Parser();
+			instance = new ParserValidationPattern();
 		}
 		return instance;
 	}

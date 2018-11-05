@@ -1,5 +1,7 @@
-import text.*;
-import text.Number;
+package by.sinkevich;
+
+import by.sinkevich.text.*;
+import by.sinkevich.text.Number;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ public interface TextManipulator {
 
 	Paragraph parseParagraph(String paragraph);
 
-	Text parse(String text);
+	Text parseText(String text);
 
 	List<TextPart> sortSentencesByWordsNumber(Text text);
 

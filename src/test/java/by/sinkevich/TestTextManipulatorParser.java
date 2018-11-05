@@ -1,9 +1,11 @@
+package by.sinkevich;
+
 import org.apache.commons.io.FileUtils;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import text.Number;
-import text.*;
-import util.TestManipulatorData;
+import by.sinkevich.text.Number;
+import by.sinkevich.text.*;
+import by.sinkevich.util.TestManipulatorData;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,9 +16,9 @@ import java.util.stream.Collectors;
 
 import static org.testng.Assert.assertEquals;
 
-public class TestManipulator implements TestManipulatorData {
+public class TestTextManipulatorParser implements TestManipulatorData {
 
-	private Manipulator manipulator = new Manipulator();
+	private TextManipulatorParser manipulator = new TextManipulatorParser();
 
 	@DataProvider
 	public static Object[][] parseSymbolTestData() {
@@ -104,7 +106,7 @@ public class TestManipulator implements TestManipulatorData {
 	}
 
 	@Test(dependsOnGroups = {"SimpleTextPartTest", "ComplexTextPartTest"})
-	public void parseTest() {
+	public void parseTextTest() {
 		String expectedText = "";
 		File file = new File("src/test/resources/parseTestInput.txt");
 		try {
@@ -114,11 +116,11 @@ public class TestManipulator implements TestManipulatorData {
 			e.printStackTrace();
 		}
 
-		Text testedText = manipulator.parse(expectedText);
+		Text testedText = manipulator.parseText(expectedText);
 		assertEquals(testedText.toString(), expectedText);
 	}
 
-	@Test(dependsOnMethods = "parseTest", dependsOnGroups = {"SimpleTextPartTest", "ComplexTextPartTest"})
+	@Test(dependsOnMethods = "parseTextTest", dependsOnGroups = {"SimpleTextPartTest", "ComplexTextPartTest"})
 	public void sortSentencesByWordsNumberTest() {
 		String expectedText = "";
 		String testedText = "";
@@ -133,7 +135,7 @@ public class TestManipulator implements TestManipulatorData {
 		}
 		List<String> expectedSentences = Arrays.asList(expectedText.split("\n"));
 
-		Text parsedText = manipulator.parse(testedText);
+		Text parsedText = manipulator.parseText(testedText);
 		List<TextPart> testedSentences = manipulator.sortSentencesByWordsNumber(parsedText);
 
 		assertEquals(expectedSentences,

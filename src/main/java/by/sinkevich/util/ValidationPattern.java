@@ -1,4 +1,4 @@
-package util;
+package by.sinkevich.util;
 
 public enum ValidationPattern {
 

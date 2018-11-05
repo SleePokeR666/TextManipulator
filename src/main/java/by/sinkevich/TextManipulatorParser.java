@@ -1,18 +1,20 @@
+package by.sinkevich;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import text.*;
-import text.Number;
+import by.sinkevich.text.*;
+import by.sinkevich.text.Number;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class Manipulator implements TextManipulator {
+public class TextManipulatorParser implements TextManipulator {
 
 	private static final Logger LOG = LogManager.getLogger();
-	private static final Parser PARSER = Parser.getInstance();
+	private static final ParserValidationPattern PARSER = ParserValidationPattern.getInstance();
 
-	public Manipulator() {
+	public TextManipulatorParser() {
 
 	}
 
@@ -57,7 +59,7 @@ public class Manipulator implements TextManipulator {
 	}
 
 	@Override
-	public Text parse(String text) {
+	public Text parseText(String text) {
 		Text result = PARSER.parseText(text);
 		LOG.info(text);
 		return result;

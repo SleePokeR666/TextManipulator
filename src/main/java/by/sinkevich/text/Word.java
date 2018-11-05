@@ -1,28 +1,28 @@
-package text;
+package by.sinkevich.text;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Number extends ComplexTextPart {
+public class Word extends ComplexTextPart {
 
-	public Number() {
+	public Word() {
 		super();
 	}
 
-	public Number(List<TextPart> textParts) {
+	public Word(List<TextPart> textParts) {
 		super(textParts);
 	}
 
 	@Override
 	public List<Word> getWords() {
-		return null;
+		List<Word> words = new ArrayList<>();
+		words.add(this);
+		return words;
 	}
 
 	@Override
 	public List<Number> getNumbers() {
-		List<Number> numbers = new ArrayList<>();
-		numbers.add(this);
-		return numbers;
+		return null;
 	}
 
 	@Override
@@ -33,5 +33,10 @@ public class Number extends ComplexTextPart {
 	@Override
 	public List<Sentence> getSentences() {
 		return null;
+	}
+
+	@Override
+	public int countWords() {
+		return 1;
 	}
 }

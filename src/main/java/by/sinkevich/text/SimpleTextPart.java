@@ -1,4 +1,4 @@
-package text;
+package by.sinkevich.text;
 
 import java.util.Objects;
 
