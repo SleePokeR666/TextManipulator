@@ -1,7 +1,9 @@
 package by.sinkevich.text;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Text extends ComplexTextPart {
 
@@ -15,13 +17,10 @@ public class Text extends ComplexTextPart {
 
 	@Override
 	public List<Paragraph> getParagraphs() {
-		List<Paragraph> result = new ArrayList<>();
-		for (TextPart textPart : getTextParts()) {
-			List<Paragraph> paragraphs = textPart.getParagraphs();
-			if (paragraphs != null) {
-				result.addAll(paragraphs);
-			}
-		}
-		return result;
+		return getTextParts().stream()
+				.map(TextPart::getParagraphs)
+				.filter(Objects::nonNull)
+				.flatMap(Collection::stream)
+				.collect(Collectors.toList());
 	}
 }
